@@ -38,26 +38,63 @@ const dbConnect = require("./db/dbConnect");
 dbConnect();
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //login and register function modyfying 
-app.post('/login', (req, res) => {
-    const { email, password } = req.body;
-  
-    if (!email || !password) {
-      error = { error: "no email or password" };
-      console.log(`error`, error);
-      return res.status(401).send(error);
-    }
-  
-    login({ email, password })
-      .then(async user => {
-        console.log('user', user);
-        const token = await user.generateAuthToken();
-        return res.status(200).send({user,token});
-      })
-      .catch(err => {
-        console.log(`err`, err.message);
-        return res.status(401).send({ error: err.message });
+
+// login endpoint
+app.post("/login", (request, response) => {
+  // check if email exists
+  User.findOne({ email: request.body.email })
+
+    // if email exists
+    .then((user) => {
+      // compare the password entered and the hashed password found
+      bcrypt
+        .compare(request.body.password, user.password)
+
+        // if the passwords match
+        .then((passwordCheck) => {
+
+          // check if password matches
+          if(!passwordCheck) {
+            return response.status(400).send({
+              message: "Passwords does not match",
+              error,
+            });
+          }
+
+          //   create JWT token
+          const token = jwt.sign(
+            {
+              userId: user._id,
+              userEmail: user.email,
+            },
+            "RANDOM-TOKEN",
+            { expiresIn: "24h" }
+          );
+
+          //   return success response
+          response.status(200).send({
+            message: "Login Successful",
+            email: user.email,
+            token,
+          });
+        })
+        // catch error if password does not match
+        .catch((error) => {
+          response.status(400).send({
+            message: "Passwords does not match",
+            error,
+          });
+        });
+    })
+    // catch error if email does not exist
+    .catch((e) => {
+      response.status(404).send({
+        message: "Email not found",
+        e,
       });
-  });
+    });
+});
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   app.get('/list', (req, res) => {
     const { limit = 10 } = req.query;
@@ -73,7 +110,7 @@ app.post('/login', (req, res) => {
       });
   });
   
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   app.post("/register", (request, response) => {
    
           
