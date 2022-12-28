@@ -50,7 +50,8 @@ app.post('/login', (req, res) => {
     login({ email, password })
       .then(async user => {
         console.log('user', user);
-        return res.status(200).send({user});
+        const token = await user.generateAuthToken();
+        return res.status(200).send({user,token});
       })
       .catch(err => {
         console.log(`err`, err.message);
@@ -72,63 +73,48 @@ app.post('/login', (req, res) => {
       });
   });
   
-  // app.post('/register',  (req, res) => {
-  //   const { name, email, password } = req.body;
-  //   if (!name || !email || !password) {
-  //     return res.status(401).send({ error: "missing user data" });
-  //   }
-  //   addUsertoDB({ name, email, password })
-  //     .then(async user => {
-  //       console.log(`Added user`, user);
-  //       const token = await user.generateAuthToken();
-  //       return res.status(200).send({user,token});
-  //     })
-  //     .catch(err => {
-  //       console.log(`err`, err);
-  //       return res.status(401).send({ error: err.message });
-  //     });
-  // });
-  // register endpoint
-app.post("/register", (request, response) => {
+
+  app.post("/register", (request, response) => {
    
           
-  // hash the password
-  bcrypt
-    .hash(request.body.password, 10)
-    .then((hashedPassword) => {
-      // create a new user instance and collect the data
-      const user = new User({
-        name:request.body.name,
-        email: request.body.email,
-        password: hashedPassword,
-       
-        tokens:request.body.token,
-
-      });
-
-      // save the new user
-      user
-        .save()
-        // return success if the new user is added to the database successfully
-        .then((result) => {
-          response.status(201).send({
-            message: "User Created Successfully",
-            result,
-          });
-        })
-        // catch error if the new user wasn't added successfully to the database
-        .catch((error) => {
-          response.status(500).send({
-            message: "Error creating user",
-            error,
-          });
+    // hash the password
+    bcrypt
+      .hash(request.body.password, 10)
+      .then((hashedPassword) => {
+        // create a new user instance and collect the data
+        const user = new User({
+          name:request.body.name,
+          email: request.body.email,
+          password: hashedPassword,
+         
+          tokens:request.body.token,
+  
         });
-    })
-    // catch error if the password hash isn't successful
-    .catch((e) => {
-      response.status(500).send({
-        message: "Password was not hashed successfully",
-        e,
+  
+        // save the new user
+        user
+          .save()
+          // return success if the new user is added to the database successfully
+          .then((result) => {
+            response.status(201).send({
+              message: "User Created Successfully",
+              result,
+            });
+          })
+          // catch error if the new user wasn't added successfully to the database
+          .catch((error) => {
+            response.status(500).send({
+              message: "Error creating user",
+              error,
+            });
+          });
+      })
+      // catch error if the password hash isn't successful
+      .catch((e) => {
+        response.status(500).send({
+          message: "Password was not hashed successfully",
+          e,
+        });
       });
   });
   
