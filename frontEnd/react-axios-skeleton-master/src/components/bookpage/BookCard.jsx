@@ -5,11 +5,12 @@ const BookCard = ({ BookAuthor, BookName, Price, image }) => {
   const classes = useStyles();
   return (
     <>
+
       <Card className={classes.card}>
-        <div style={{ width: "100%", height: "70%" }}>
+        <div style={{height:"65%",width:"100%"}}>
           <img className={classes.cardMedia} src={image} alt={BookName}></img>
         </div>
-        <CardContent className={classes.cardContent} style={{ width: "100%", height: "15%", padding: '6px' }}>
+        <CardContent className={classes.cardContent}>
           <Typography gutterBottom variant="h5" component="div">
             {BookName}
           </Typography>
@@ -17,12 +18,13 @@ const BookCard = ({ BookAuthor, BookName, Price, image }) => {
             {BookAuthor}
           </Typography>
           <Typography>{Price}</Typography>
-        </CardContent>
+          </CardContent>
         <CardActions>
           <Button size="small" >
             Add to card
           </Button>
         </CardActions>
+        
       </Card>
     </>
 

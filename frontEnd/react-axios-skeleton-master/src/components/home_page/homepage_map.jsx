@@ -1,5 +1,5 @@
 import React from 'react'
-import UseStyles from '../../Style'
+import UseStyles from './Style'
 import homepage_array from './homepage_array'
 import {
     Typography,
@@ -10,6 +10,8 @@ import {
     Container,
     Toolbar,
     Card,
+    Box,
+    IconButton,
 } from '@material-ui/core'
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
@@ -26,8 +28,8 @@ const homepage_map = ({ id, cardName, image, links }) => {
                     {/* <IconButton size='large' edge='start' color='inherit' aria-label='logo'>
                         <LocalLibraryIcon></LocalLibraryIcon>
                     </IconButton> */}
-                    <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-                        book store
+                    <Typography variant='h6' component='div' sx={{ flexGrow: 1 }} style={{ flex: 1 }}>
+                        BookSky store
                     </Typography>
                     <Grid >
                         <Toolbar >
@@ -53,10 +55,10 @@ const homepage_map = ({ id, cardName, image, links }) => {
             <div className={classes.paperContainer}>
                 <Container maxWidth="9g" style={{ marginTop: "90px" }}>
                     <Typography variant='h2'
-                        align="center"
+                        align='center'
                         color='textPrimary'
                         gutterBottom>
-                        bookSky Store
+                        BookSky Store
                     </Typography>
                     <Typography variant='h4'
                         align="center"
@@ -66,11 +68,10 @@ const homepage_map = ({ id, cardName, image, links }) => {
                     </Typography>
                 </Container>
             </div>
-            <Container maxWidth="md" style={{ marginTop: "200px" }}></Container>
-            <Grid padding={3} spacing={6} container>
-                {homepage_array.map((homecard) => (
-                    <Grid xs={6} sm={4} md={3} lg={4} height={'50px'} width={"100px"} item>
-                        <Link href={homecard.links} variant="body2">
+            < Container className={classes.cardGrid} maxWidth="md">
+                <Grid container spacing={4}>
+                    {homepage_array.map((homecard) => (
+                        <Grid xs={6} sm={4} md={3} lg={4} height={'50px'} width={"100px"} item>
                             <Card className={classes.card} style={{ width: "30", height: "40" }}>
                                 <div style={{ width: "100%", height: "70%" }}>
                                     <img className={classes.cardMedia} src={homecard.image} alt={homecard}></img>
@@ -81,16 +82,62 @@ const homepage_map = ({ id, cardName, image, links }) => {
                                     </Typography>
                                 </CardContent>
                                 <CardActions style={{ padding: '3px' }}>
-                                    <Button size="small" color="primary">
-                                        views
-                                    </Button>
+                                    <Link href={homecard.links} variant="body2">
+                                        <Button size="small" color="primary">
+                                            views
+                                        </Button>
+                                    </Link>
                                 </CardActions>
                             </Card>
-                        </Link>
-                    </Grid>
-                ))}
-            </Grid>
-        </div>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Container>
+            <div style={{
+                background: "#848482",
+                padding: "20px",
+                margin: "5px",
+            }}>
+                <Container maxWidth="9g" style={{ marginTop: "10px" }}>
+                    <Typography variant='h6'
+                        align="left"
+                        color='textPrimary'
+                        gutterBottom>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>instractions</td>
+                                    <td>Company</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><Link href={ROUTES.Contact_us} variant="body2" color='inherit'>Terms of service</Link></td>
+                                    <td><Link href={ROUTES.Contact_us} variant="body2" color='inherit'>contact us</Link></td>
+                                </tr>
+                                <tr>
+                                    <td><Link href={ROUTES.About_us} variant="body2" color='inherit'>Copyright </Link></td>
+                                    <td><Link href={ROUTES.About_us} variant="body2" color='inherit'>About us</Link></td>
+                                </tr>
+                                <tr>
+                                    <td><Link href={ROUTES.About_us} variant="body2" color='inherit'>Return policy</Link></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </Typography>
+                    <div style={{ padding: "20px", margin: "5px" }}>
+                        <Container maxWidth="9g" >
+                            <Typography variant='h7'
+                                align="center"
+                                color='textPrimary'
+                                gutterBottom>
+                                All rights reserved to BookSky 2021-2022 - by our teams
+                            </Typography>
+                        </Container>
+                    </div>
+                </Container>
+            </div>
+        </div >
 
     )
 }
